@@ -31,7 +31,7 @@ def get_Gsearch_results(keyword,num_pages=5):
         url = f"https://www.google.com/search?q={keyword}&start={start}"
         
         response = requests.get(url, headers=headers)
-        time.sleep(2)
+        time.sleep(3)
         soup = BeautifulSoup(response.text, "html.parser")
         results = soup.find_all("h3")
         search_results.extend([r.text for r in results])
@@ -51,25 +51,23 @@ def make_lis(firstword,G,color):
             if pos[0]=="名詞" and (pos[1]=='一般' or pos[1]=='固有名詞')and token.surface!='-' and 'サ変接続' not in pos:
                 saihin.append(token.surface)
     c = collections.Counter(saihin)
-    a = [i[0] for i in c.items() if i[1] >= 5]
+    a = [i[0] for i in c.items() if i[1] >=5]
     print(a)
     create_network_graph(firstword,a,G,color)
     return a
     
     
 def create_network_graph(firstword,keywords,G,color):
-    """for i, keyword in enumerate(keywords):
-        G.add_node(keyword,color = color)
-        if i > 0:
-            G.add_edge(keywords[0], keyword)"""
     if not G.has_node(firstword):
         G.add_node(firstword, color=color)  # ノード追加時に色を設定
-    for i,keyword in enumerate(keywords):
-        if i>0: 
-            if not G.has_node(keyword):
-                G.add_node(keyword, color=color)  # ノード追加時に色を設定
-            if not G.has_edge(firstword, keyword):
-                G.add_edge(firstword, keyword)
+    for keyword in keywords:
+        # Ensure keyword is a string, not a list
+        if keyword[0]=="[" and keyword[-1]=="]":
+            keyword = keyword[1:-1]
+        if not G.has_node(keyword):
+            G.add_node(keyword, color=color)
+        if not G.has_edge(firstword, keyword) and firstword!=keyword:
+            G.add_edge(firstword, keyword)
     
 import datetime
 
@@ -77,7 +75,7 @@ dt_now = datetime.datetime.now()
 
 def main():
     G = nx.Graph()
-    lis = make_lis("りんご",G,"yellow")
+    lis = make_lis("りんご",G,"red")
     for i, keyword in enumerate(lis):
         lis2 = make_lis(keyword,G,"lightblue")
         for j in lis2:
@@ -89,7 +87,7 @@ def main():
 
     plt.figure(figsize=(20,20))
     nx.draw(G, pos,with_labels=True, font_family='IPAexGothic',node_size=1000,node_color = node_colors)
-    plt.savefig("test/photo/%s日%s-%s-%s.png" %(dt_now.day,dt_now.hour,dt_now.minute,dt_now.second), bbox_inches="tight")
+    plt.savefig("photo/%s日%s-%s-%s.png" %(dt_now.day,dt_now.hour,dt_now.minute,dt_now.second), bbox_inches="tight")
     plt.show()
         
 #print(lis)

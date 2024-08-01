@@ -16,7 +16,7 @@ japanize_matplotlib.japanize()
 plt.figure()
 # ネットワークの可視化
 nx.draw(G, with_labels = True,font_family='IPAexGothic')
-plt.savefig("test/photo/3.png", bbox_inches="tight")
+plt.savefig("photo/3.png", bbox_inches="tight")
 plt.legend()
 plt.show()
 

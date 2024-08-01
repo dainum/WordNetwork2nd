@@ -65,10 +65,10 @@ def main():
     japanize_matplotlib.japanize()
     pos = nx.spring_layout(G,k=1.5,iterations=10000)
     #pos = nx.planar_layout(G)
+    
     plt.figure(figsize=(15, 15))
-
     nx.draw(G, pos, alpha = 0.9,with_labels=True, font_family='IPAexGothic', node_size=1000, node_color=node_colors,arrows=True)
-    plt.savefig("test/photo/word2vec-%s日%s-%s-%s.png" % (dt_now.day, dt_now.hour, dt_now.minute, dt_now.second), bbox_inches="tight")
+    plt.savefig("photo/word2vec-%s日%s-%s-%s.png" % (dt_now.day, dt_now.hour, dt_now.minute, dt_now.second), bbox_inches="tight")
     plt.show()
 
 if __name__ == "__main__":
